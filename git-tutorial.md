@@ -397,7 +397,7 @@ Alternative Branch -                                             dn34f45  --->  
 
 ## 11) Merging
 
-* Antes de começar o merging, deve ser feito o checkout para o branch que irá receber as atualizações.
+* Antes de começar o merging, deve ser feito **o checkout para o branch** que irá receber as atualizações.
 
 * `git merge <branch_com_as_atualizações>`
 
@@ -413,7 +413,7 @@ Alternative Branch -                                             dn34f45  --->  
     * `git merge --abort`
 
 2) Voce pode resolver os conflitos manualmente(Eh o que vc mais vai fazer)
-    * Apos resolver os conflitos:
+    * Após resolver os conflitos:
     * `git add <file>` - Para colocar o arquivo no Staging Index e 
     * Digite: `git commit` e uma mensagem padrão de commit de merge será adicionada
 
@@ -456,7 +456,7 @@ Alternative Branch -                                             dn34f45  --->  
 1) **origin/master** - Branch criado pelo Git na nossa maquina local que referencia o branch do servidor remoto
 2) **push** - Empurra todos os commits feitos na maquina local para o repositorio remoto
 3) **fetch** - Busca atualizações feitas no servidor remoto e traz para o nosso repositorio local, atualizando primeiramente o **orgin/master**.
-4) **merge** - Após a sincronização do **remote server** com o **origin/master** a atualização esta na nossa maquina mas nao no nosso branch master, para isso eh preciso fazer um *merge*.
+4) **merge** - Após a sincronização do **remote server** com o **origin/master** a atualização esta na nossa maquina mas nao no nosso **branch master local**, para isso eh preciso fazer um *merge*.
 
 _______
 
@@ -470,4 +470,83 @@ _______
 
 * `cat .git/config` - Mostra info do branch remoto.
 
-* `git remote rm <alias>` - Remove/Deleta o branch remoto.
+* `git remote rm <alias>` - Remove/Deleta o link com o repositorio remoto.
+
+* `git push -u <alias_remote_branch> <local_branch>` - Empurra(push) nosso codigo no ***local_branch*** para o repositorio remoto(**GERALMENTE CHAMADO DE ORIGIN**).
+    * **Branch 'master' set up to track remote branch 'master' from 'origin'**.
+
+    * **Quando o branch já estiver Trackeado, não há mais necessidade de digitar -u, apenas digite**: `git push` **para enviar os commits para o servidor remoto.**
+
+* `git branch -r` - Mostra os branches remotos.
+
+* `git branch -a` - Mostra os branches remotos e locais.
+
+* **Fetch** eh o que sincroniza o origin/master com o que esta no Repositorio Remoto
+    * origin/master não reflete o que esta no Repositorio Remoto, precisamos fazer um Sync
+    * `git fetch origin` - Vai até o Github e baixa tudo para sincronizar com o local.
+    * origin = aponta/apelido para o Github como demostrado no **.git/config** file.
+
+    * Se vc fizer um `git log` depois do fetch, ele soh atualizou o origin/master, para atualizar o master local eh preciso fazer um **MERGE** (Lembre da figura - **remote branch -> origin/master -> master**).
+    * `git merge origin/master`
+    * `git pull` = (`git fetch` + `git merge`) - Faz os dois comandos de uma vez só.
+
+#### Colaborando com um projeto Open Source
+
+1) Escolha o projeto no github e copie o caminho para o repositorio do projeto.
+
+2) Em seguida, digite: `git clone <url_do_projeto> | <nome-da-pasta>`
+
+3) Um diretorio será criado com o mesmo nome do projeto que esta lah no github
+____
+* Voce vai escolher o projeto que quer "trabalhar"/"commitar" na página do Github
+
+* Vai até o botão de **Fork** para vc ter uma Cópia do projeto na sua conta pessoal
+
+* Após as suas modificações/melhorias no projeto, vc retorna a pagina original do projeto e vai no botão **Pull Request**
+
+#### Trackeando um branch remoto Não Trackeado
+
+* SE vc utilizou o comando `git push` sem o **-u** option, o branch nao será trackeado com o que esta remotamente no github.
+
+* Para votlar a trackear digite: `git branch --set-upstream <nome_do_branch> origin/<nome_do_branch>` 
+
+#### Guidelines git fetch
+
+* Sempre comece o dia usando o `git fetch` antes de iniciar qualquer trabalho.
+* Sempre use o `git fetch` antes do `git push`
+* Fetch Sempre Sempre Sempre, eh de graça
+
+#### Como CheckoutEaR Branchs Remotos
+
+* `git branch -r` - Para ver os branchs remotos
+
+* `git branch <criando-novo-nome-do-branch> <origin/nome-do-branch-remoto>` - Os nomes podem ser os mesmos.
+    * **Branch `<new-name>` set up to track remote branch `<remote-name>` from origin**
+
+* `git branch -d <new-name>` - Deleta o branch recem criado com base no branch remoto.
+
+* `git checkout -b <criando-novo-nome-do-branch> <origin/nome-do-branch-remoto>` - Faz tudo num comando só
+
+### Algumas notas com relação a pushing para um branch remoto com muitas atualizações !!!
+
+1) O git nunca tenta fazer um **merge** durante uma operação de **push** onde o branch remoto possui muitas atualizações
+2) Você precisa fazer um **fetch** com as mudanças que estão no servidor remoto
+3) Depois disso vc faz um **merge** das mudanças locais com o **origin/master** e cria um novo **merge commit** 
+4) DAi sim eh possivel fazer o **push** para o servidor remoto com as atualizações
+
+#### Deletando um Branch Remoto
+
+1) `git push origin :<nome-do-branch-remoto>` - Push to origin(REMOTE) 'NADA/VAzio/NuLo' para o branch `<nome-do-branch-remoto>`.
+
+2) `git push origin --delete <nome-do-branch-remoto>` - Mais intuitvo do que o de cima
+
+## 14) General Tips and Tricks(stay tunned)
+
+* Alguns comandos repetitivos/verbosos podem ser customizados criando-se um **alias**
+
+* Para criar um alias a nível de usuário `cat ~/.gitconfig` usa-se o seguinte commando:
+    * `git config --global alias.<apelido-para-o-comando> <comando-propriamente-dito>`
+    * Se o comando do git contem espaços então será necessário coloca-lo entre "aspas"
+    * **Ex:** `git config --global alias.logg "log --grap --decorate --all -oneline --abbrev-commit" `
+
+* Gerando chaves SSH
